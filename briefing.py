@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 MILAN_TZ = ZoneInfo("Europe/Rome")
 today = datetime.now(MILAN_TZ)
-date_str = today.strftime("%Y년 %m월 %d일 (%a)")
+date_str = today.strftime("%Y년 %m월 %d일 (%a)")h
 date_iso = today.strftime("%Y-%m-%d")
 
 SYSTEM_PROMPT = "이탈리아 밀라노 주재원을 위한 뉴스 큐레이터. 반드시 순수 JSON 배열만 반환. 코드블록 금지."
@@ -30,7 +30,7 @@ def fetch_news(client, section):
     time.sleep(8)
     resp = client.messages.create(
         model="claude-haiku-4-5",
-        max_tokens=600,
+        max_tokens=1500,
         system=SYSTEM_PROMPT,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[{"role": "user", "content": PROMPTS[section]}]
