@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 MILAN_TZ = ZoneInfo("Europe/Rome")
 today = datetime.now(MILAN_TZ)
-date_str = today.strftime("%Y년 %m월 %d일 (%a)")h
+date_str = today.strftime("%Y년 %m월 %d일 (%a)")
 date_iso = today.strftime("%Y-%m-%d")
 
 SYSTEM_PROMPT = "이탈리아 밀라노 주재원을 위한 뉴스 큐레이터. 반드시 순수 JSON 배열만 반환. 코드블록 금지."
