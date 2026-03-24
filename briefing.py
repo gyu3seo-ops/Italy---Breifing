@@ -1,8 +1,8 @@
 import anthropic
 import json
 import os
-import time
 import re
+import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -14,9 +14,17 @@ date_iso = today.strftime("%Y-%m-%d")
 client = None
 
 PROMPTS = {
-    "italy": f"Search web for today({date_iso}) Italy news. Return ONLY a JSON array, no other text: [{{\"category\":\"정치\",\"title\":\"title\",\"body\":\"2 sentence summary\",\"time\":\"today\"}}]. Include 2 economy, 2 politics, 1 society items.",
-    "europe": f"Search web for today({date_iso}) Europe/EU news. Return ONLY a JSON array, no other text: [{{\"category\":\"유럽\",\"title\":\"title\",\"body\":\"2 sentence summary\",\"time\":\"today\"}}]. Include 4 items.",
-    "global": f"Search web for today({date_iso}) global news. Return ONLY a JSON array, no other text: [{{\"category\":\"글로벌\",\"title\":\"title\",\"body\":\"2 sentence summary\",\"italy_angle\":\"Italy perspective 1 sentence\",\"time\":\"today\"}}]. Include 4 items."
+    "italy": f"""오늘({date_iso}) 이탈리아 최신 뉴스를 웹에서 검색해서 경제 2개, 정치 2개, 사회 1개를 선별해줘.
+반드시 아래 형식의 JSON 배열만 반환해. 설명, 마크다운, 인용태그 절대 금지.
+[{{"category":"경제","title":"한글제목","body":"한글로 2문장 요약","time":"오늘"}}]""",
+
+    "europe": f"""오늘({date_iso}) 유럽/EU 최신 뉴스를 웹에서 검색해서 4개 선별해줘.
+반드시 아래 형식의 JSON 배열만 반환해. 설명, 마크다운, 인용태그 절대 금지.
+[{{"category":"유럽","title":"한글제목","body":"한글로 2문장 요약","time":"오늘"}}]""",
+
+    "global": f"""오늘({date_iso}) 글로벌 주요 뉴스를 웹에서 검색해서 4개 선별하고 각각 이탈리아의 반응/관점을 추가해줘.
+반드시 아래 형식의 JSON 배열만 반환해. 설명, 마크다운, 인용태그 절대 금지.
+[{{"category":"글로벌","title":"한글제목","body":"한글로 2문장 요약","italy_angle":"이탈리아 시각 1문장","time":"오늘"}}]"""
 }
 
 STYLES = {
@@ -27,6 +35,15 @@ STYLES = {
     "글로벌": ("#FAECE7", "#712B13"),
 }
 
+def clean_text(text):
+    # <cite ...>...</cite> 태그 제거
+    text = re.sub(r'<cite[^>]*>(.*?)</cite>', r'\1', text, flags=re.DOTALL)
+    # 기타 HTML 태그 제거
+    text = re.sub(r'<[^>]+>', '', text)
+    # 마크다운 코드블록 제거
+    text = re.sub(r'```[\w]*\n?', '', text)
+    return text.strip()
+
 def fetch_news(section, retries=3):
     for attempt in range(retries):
         try:
@@ -34,46 +51,45 @@ def fetch_news(section, retries=3):
             resp = client.messages.create(
                 model="claude-haiku-4-5",
                 max_tokens=1500,
-                system="You are a news curator. Return ONLY valid JSON array. No markdown, no explanation, no code blocks. Just the raw JSON array starting with [ and ending with ].",
+                system="당신은 뉴스 큐레이터입니다. 반드시 순수한 JSON 배열만 반환하세요. 어떤 태그, 마크다운, 설명도 포함하지 마세요.",
                 tools=[{"type": "web_search_20250305", "name": "web_search"}],
                 messages=[{"role": "user", "content": PROMPTS[section]}]
             )
-            # 텍스트 블록만 추출
-            text = ""
+
+            # 텍스트만 추출하고 cite 태그 등 제거
+            raw = ""
             for block in resp.content:
                 if hasattr(block, "text") and block.text:
-                    text += block.text
+                    raw += block.text
 
-            text = text.strip()
+            raw = clean_text(raw)
+
             # JSON 배열 부분만 추출
-            match = re.search(r'\[.*\]', text, re.DOTALL)
-            if match:
-                text = match.group(0)
-
-            if not text:
-                print(f"  ⚠️ {section} 응답 비어있음, 재시도 {attempt+1}/{retries}")
+            match = re.search(r'\[.*\]', raw, re.DOTALL)
+            if not match:
+                print(f"  ⚠️ {section} JSON 배열 없음, 재시도 {attempt+1}/{retries}")
                 continue
 
-            result = json.loads(text)
+            result = json.loads(match.group(0))
             if result:
+                print(f"  ✓ {len(result)}개 완료")
                 return result
-            print(f"  ⚠️ {section} 빈 배열, 재시도 {attempt+1}/{retries}")
 
         except json.JSONDecodeError as e:
-            print(f"  ⚠️ {section} JSON 파싱 오류: {e}, 재시도 {attempt+1}/{retries}")
+            print(f"  ⚠️ JSON 파싱 오류: {e}, 재시도 {attempt+1}/{retries}")
         except Exception as e:
-            print(f"  ⚠️ {section} 오류: {e}, 재시도 {attempt+1}/{retries}")
+            print(f"  ⚠️ 오류: {e}, 재시도 {attempt+1}/{retries}")
 
-    # 재시도 모두 실패시 기본값 반환
+    # 모두 실패시 기본값
     cat = "유럽" if section == "europe" else ("글로벌" if section == "global" else "정치")
-    return [{"category": cat, "title": f"{section} 뉴스를 불러오지 못했습니다", "body": "잠시 후 다시 시도해주세요.", "time": "오늘"}]
+    return [{"category": cat, "title": "뉴스를 불러오지 못했습니다", "body": "잠시 후 다시 시도해주세요.", "time": "오늘"}]
 
 def card(item):
     cat = item.get("category", "글로벌")
     bg, fg = STYLES.get(cat, ("#FAECE7", "#712B13"))
     angle = f'<div class="ia">🇮🇹 이탈리아 시각: {item["italy_angle"]}</div>' if item.get("italy_angle") else ""
-    title = str(item.get("title", "")).replace("<", "&lt;").replace(">", "&gt;")
-    body = str(item.get("body", "")).replace("<", "&lt;").replace(">", "&gt;")
+    title = str(item.get("title", "")).replace("<","&lt;").replace(">","&gt;")
+    body = str(item.get("body", "")).replace("<","&lt;").replace(">","&gt;")
     return f'<div class="card"><div class="ct"><span class="pill" style="background:{bg};color:{fg}">{cat}</span><span class="tm">{item.get("time","오늘")}</span></div><div class="ttl">{title}</div><div class="bdy">{body}</div>{angle}</div>'
 
 def build_html(italy, europe, glob):
@@ -93,20 +109,15 @@ def main():
 
     print("📰 이탈리아 뉴스...")
     italy = fetch_news("italy")
-    print(f"  ✓ {len(italy)}개")
-
     print("🇪🇺 유럽 뉴스...")
     europe = fetch_news("europe")
-    print(f"  ✓ {len(europe)}개")
-
     print("🌐 글로벌 뉴스...")
     glob = fetch_news("global")
-    print(f"  ✓ {len(glob)}개")
 
     os.makedirs("docs", exist_ok=True)
     with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(build_html(italy, europe, glob))
-    print("✅ 완료! docs/index.html 생성됨")
+    print("✅ 완료!")
 
 if __name__ == "__main__":
     main()
