@@ -17,12 +17,12 @@ date_label = today.strftime("%Y-%m-%d")
 client = None
 
 PROMPTS = {
-    "italy_eco": f'Today is {date_iso}. Search web for Italy ECONOMY news from {date_iso} only. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"경제","category_en":"Economy","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get exactly 2 items.',
-    "italy_pol": f'Today is {date_iso}. Search web for Italy POLITICS and SOCIETY news from {date_iso} only. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"정치","category_en":"Politics","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 2 politics(정치) and 1 society(사회) items, 3 total.',
+    "italy_eco": f'Today is {date_iso}. Search web for Italy ECONOMY news. CRITICAL: Only include articles with publication date {date_iso}. Check each article's date. Discard anything not from {date_iso}. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"경제","category_en":"Economy","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get exactly 2 items.',
+    "italy_pol": f'Today is {date_iso}. Search web for Italy POLITICS and SOCIETY news. CRITICAL: Only include articles with publication date {date_iso}. Check each article's date. Discard anything not from {date_iso}. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"정치","category_en":"Politics","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 2 politics(정치) and 1 society(사회) items, 3 total.',
 
-    "europe": f'Today is {date_iso}. Search web for Europe/EU news from {date_iso} only. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"유럽","category_en":"Europe","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 4 items.',
+    "europe": f'Today is {date_iso}. Search web for Europe/EU news. CRITICAL: Only include articles with publication date {date_iso}. Check each article's date. Discard anything not from {date_iso}. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"유럽","category_en":"Europe","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 4 items.',
 
-    "global": f'Today is {date_iso}. Search web for global news from {date_iso} only. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"글로벌","category_en":"Global","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","italy_angle":"이탈리아 시각 한글","italy_angle_en":"Italy perspective English","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 4 items.'
+    "global": f'Today is {date_iso}. Search web for global news. CRITICAL: Only include articles with publication date {date_iso}. Check each article's date. Discard anything not from {date_iso}. EXCLUDE: Do not include any Olympics, Paralympics, Winter Olympics, Milan-Cortina 2026, opening ceremony, or closing ceremony news. These events are already over. Return JSON array only, no other text: [{{"category":"글로벌","category_en":"Global","title":"한글제목","title_en":"English title","body":"한글 2문장","body_en":"2 sentences","italy_angle":"이탈리아 시각 한글","italy_angle_en":"Italy perspective English","source":"site name","url":"https://...","time":"{date_iso}"}}]. Get 4 items.'
 }
 
 STYLES = {
@@ -51,7 +51,7 @@ def fetch_news(section, retries=3):
             resp = client.messages.create(
                 model="claude-haiku-4-5",
                 max_tokens=2000,
-                system=f"You are a news curator. Today is {date_iso}. Return ONLY a raw JSON array. No markdown, no explanation, no cite tags, no code blocks.",
+                system=f"You are a news curator for {date_iso}. CRITICAL DATE RULE: ONLY include articles published on {date_iso}. Verify each article's publication date before including it. Articles from any other date must be excluded. Return ONLY a raw JSON array. No markdown, no explanation, no cite tags, no code blocks.",
                 tools=[{"type": "web_search_20250305", "name": "web_search"}],
                 messages=[{"role": "user", "content": PROMPTS[section]}]
             )
@@ -66,8 +66,12 @@ def fetch_news(section, retries=3):
                 continue
             result = json.loads(match.group(0))
             if result:
-                print(f"  ✓ {section} {len(result)}개 완료")
-                return result
+                # 날짜 검증: 오늘 날짜 아닌 뉴스 제거
+                result = [item for item in result if item.get("time","") in (date_iso, "오늘", "today")]
+                if result:
+                    print(f"  ✓ {section} {len(result)}개 완료 (날짜 검증 통과)")
+                    return result
+                print(f"  ⚠️ {section} 날짜 불일치로 전부 제거됨 (재시도 {attempt+1}/{retries})")
             print(f"  ⚠️ {section} 빈 배열 (재시도 {attempt+1}/{retries})")
         except json.JSONDecodeError as e:
             print(f"  ⚠️ {section} JSON 파싱 오류: {e} (재시도 {attempt+1}/{retries})")
