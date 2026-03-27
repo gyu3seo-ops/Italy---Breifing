@@ -1,48 +1,122 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>밀라노 브리핑 2026년 03월 27일 (Fri)</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f0;color:#1a1a1a}.wrap{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;flex-wrap:wrap;gap:8px}.top h1{font-size:20px;font-weight:600}.top p{font-size:12px;color:#888;margin-top:3px}.update-info{font-size:12px;color:#888;margin-bottom:1.25rem;padding:8px 12px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}.db{font-size:12px;padding:5px 12px;border-radius:8px;background:#fff;border:1px solid #e0e0e0;color:#555}.top-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.lang-btn{padding:5px 14px;font-size:12px;font-weight:600;border-radius:8px;border:1px solid #ddd;cursor:pointer;background:#fff;color:#555}.lang-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}.tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}.tab{padding:7px 18px;font-size:13px;font-weight:500;border-radius:8px;border:1px solid #ddd;cursor:pointer;color:#555;background:#fff}.tab.on{background:#dbeafe;color:#1e40af;border-color:transparent}.pane{display:none}.pane.on{display:block}.card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}.ct{display:flex;align-items:center;gap:8px;margin-bottom:8px}.pill{font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px}.tm{font-size:11px;color:#aaa;margin-left:auto}.ttl{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:6px}.bdy{font-size:13px;color:#555;line-height:1.65}.ia{margin-top:9px;padding:7px 10px;border-left:2px solid #d4537e;background:#fbeaf0;font-size:12px;color:#72243e;line-height:1.55}.src{display:inline-block;margin-top:8px;font-size:11px;color:#1e40af;text-decoration:none}.disclaimer{margin-top:10px;padding:8px 12px;background:#f8f8f8;border-radius:8px;font-size:11px;color:#999;line-height:1.5;border:1px solid #eee}.ft{text-align:center;font-size:11px;color:#bbb;margin-top:2rem}.arc-link{font-size:12px;color:#1e40af;text-decoration:none;padding:5px 12px;border:1px solid #ddd;border-radius:8px;background:#fff}</style></head><body><div class="wrap">
-<div class="top"><div><h1>밀라노 주재원 데일리 브리핑</h1><p>이탈리아 · 유럽 · 글로벌</p></div>
-<div class="top-right"><div class="db">2026년 03월 27일 (Fri)</div><button class="lang-btn active" id="btn-kr" onclick="setLang('kr')">KR</button><button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button><a class="arc-link" href="archive.html">📂 지난 브리핑</a></div></div>
-<div class="update-info"><span>🕕 매일 오전 6시 (밀라노 시간) 자동 업데이트</span><span style="color:#aaa">Daily auto-update at 6:00 AM Milan time</span></div>
-<div class="tabs"><div class="tab on" onclick="sw('it',this)"><span class="kr">🇮🇹 이탈리아</span><span class="en" style="display:none">🇮🇹 Italy</span></div><div class="tab" onclick="sw('eu',this)"><span class="kr">🇪🇺 유럽</span><span class="en" style="display:none">🇪🇺 Europe</span></div><div class="tab" onclick="sw('gl',this)"><span class="kr">🌐 글로벌</span><span class="en" style="display:none">🌐 Global</span></div></div>
-<div id="it" class="pane on"><div class="card">
-      <div class="ct">
-        <span class="pill kr" style="background:#E6F1FB;color:#0C447C">경제</span>
-        <span class="pill en" style="display:none;background:#E6F1FB;color:#0C447C">Economy</span>
-        <span class="tm">2026-03-27</span>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>밀라노 브리핑 2026년 03월 27일 (Fri)</title>
+<style>
+  :root{--bg:#f5f5f0;--card:#fff;--txt:#1a1a1a;--sub:#666;--border:#e5e5e5;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt);padding:24px 16px;}
+  .wrap{max-width:680px;margin:0 auto}
+  header{margin-bottom:24px}
+  h1{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+  .sub{color:var(--sub);font-size:.85rem;margin-bottom:12px}
+  .meta{font-size:.8rem;color:var(--sub);background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px}
+  .lang-btn{display:flex;gap:6px;margin-bottom:20px}
+  .lang-btn button{padding:6px 18px;border:none;border-radius:20px;cursor:pointer;font-size:.85rem;font-weight:600;transition:.2s}
+  .lang-btn button.active{background:#1a1a1a;color:#fff}
+  .lang-btn button:not(.active){background:#e5e5e5;color:#555}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{padding:8px 18px;border-radius:20px;border:1.5px solid #ddd;background:#fff;cursor:pointer;font-size:.85rem;font-weight:600;transition:.2s}
+  .tab.active{border-color:#1a1a1a;background:#1a1a1a;color:#fff}
+  .section{display:none}.section.active{display:block}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px}
+  .card-tag{display:inline-block;border-radius:6px;padding:3px 10px;font-size:.78rem;font-weight:700;margin-bottom:8px}
+  .card-date{font-size:.75rem;color:var(--sub);margin-bottom:6px}
+  .card-title{font-size:1.05rem;font-weight:700;line-height:1.4;margin-bottom:8px}
+  .card-body{font-size:.9rem;line-height:1.6;color:#333;margin-bottom:10px}
+  .card-src{font-size:.8rem;color:var(--sub)}.card-src a{color:#0066cc;text-decoration:none}
+  .en{display:none}.en-mode .kr{display:none}.en-mode .en{display:block}
+  .archive-link{text-align:center;margin-top:24px;font-size:.85rem}
+  .archive-link a{color:#0066cc;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>밀라노 주재원 데일리 브리핑</h1>
+    <div class="sub">이탈리아 · 유럽 · 글로벌</div>
+    <div class="meta">
+      <span class="kr">📅 매일 오전 6시 (밀라노 시간) 자동 업데이트</span>
+      <span class="en">📅 Daily auto-update at 6:00 AM Milan time</span>
+      <span>2026년 03월 27일 (Fri) &nbsp;|&nbsp; March 27, 2026 (Fri)</span>
+    </div>
+  </header>
+
+  <div class="lang-btn">
+    <button id="btn-kr" class="active" onclick="setLang('kr')">KR</button>
+    <button id="btn-en" onclick="setLang('en')">EN</button>
+    <a href="archive.html" style="margin-left:auto;padding:6px 14px;border-radius:20px;border:1.5px solid #ddd;background:#fff;font-size:.82rem;font-weight:600;color:#555;text-decoration:none;">🗂 지난 브리핑</a>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('italy',this)">🇮🇹 이탈리아</button>
+    <button class="tab" onclick="showTab('europe',this)">🇪🇺 유럽</button>
+    <button class="tab" onclick="showTab('global',this)">🌐 글로벌</button>
+  </div>
+
+  <div id="italy" class="section active">
+    <div class="card">
+      <div class="card-tag" style="background:#E6F1FB;color:#0C447C;">
+        <span class="kr">경제</span><span class="en">Economy</span>
       </div>
-      <div class="ttl kr">뉴스를 불러오지 못했습니다</div><div class="ttl en" style="display:none">Failed to load news</div>
-      <div class="bdy kr">잠시 후 다시 시도해주세요.</div><div class="bdy en" style="display:none">Please try again later.</div>
-      
-    </div><div class="card">
-      <div class="ct">
-        <span class="pill kr" style="background:#EEEDFE;color:#3C3489">정치</span>
-        <span class="pill en" style="display:none;background:#EEEDFE;color:#3C3489">Politics</span>
-        <span class="tm">2026-03-27</span>
+      <div class="card-date">2026-03-27</div>
+      <div class="card-title kr">뉴스를 불러오지 못했습니다</div>
+      <div class="card-title en">Failed to load news</div>
+      <div class="card-body kr">잠시 후 다시 시도해주세요.</div>
+      <div class="card-body en">Please try again later.</div>
+      <div class="card-src"></div>
+    </div>
+    <div class="card">
+      <div class="card-tag" style="background:#EEEDFE;color:#3C3489;">
+        <span class="kr">정치</span><span class="en">Politics</span>
       </div>
-      <div class="ttl kr">뉴스를 불러오지 못했습니다</div><div class="ttl en" style="display:none">Failed to load news</div>
-      <div class="bdy kr">잠시 후 다시 시도해주세요.</div><div class="bdy en" style="display:none">Please try again later.</div>
-      
+      <div class="card-date">2026-03-27</div>
+      <div class="card-title kr">뉴스를 불러오지 못했습니다</div>
+      <div class="card-title en">Failed to load news</div>
+      <div class="card-body kr">잠시 후 다시 시도해주세요.</div>
+      <div class="card-body en">Please try again later.</div>
+      <div class="card-src"></div>
     </div></div>
-<div id="eu" class="pane"><div class="card">
-      <div class="ct">
-        <span class="pill kr" style="background:#FAEEDA;color:#633806">유럽</span>
-        <span class="pill en" style="display:none;background:#FAEEDA;color:#633806">Europe</span>
-        <span class="tm">2026-03-27</span>
+  <div id="europe" class="section">
+    <div class="card">
+      <div class="card-tag" style="background:#FAEEDA;color:#633806;">
+        <span class="kr">유럽</span><span class="en">Europe</span>
       </div>
-      <div class="ttl kr">뉴스를 불러오지 못했습니다</div><div class="ttl en" style="display:none">Failed to load news</div>
-      <div class="bdy kr">잠시 후 다시 시도해주세요.</div><div class="bdy en" style="display:none">Please try again later.</div>
-      
+      <div class="card-date">2026-03-27</div>
+      <div class="card-title kr">뉴스를 불러오지 못했습니다</div>
+      <div class="card-title en">Failed to load news</div>
+      <div class="card-body kr">잠시 후 다시 시도해주세요.</div>
+      <div class="card-body en">Please try again later.</div>
+      <div class="card-src"></div>
     </div></div>
-<div id="gl" class="pane"><div class="card">
-      <div class="ct">
-        <span class="pill kr" style="background:#FAECE7;color:#712B13">글로벌</span>
-        <span class="pill en" style="display:none;background:#FAECE7;color:#712B13">Global</span>
-        <span class="tm">2026-03-27</span>
+  <div id="global" class="section">
+    <div class="card">
+      <div class="card-tag" style="background:#FAECE7;color:#712B13;">
+        <span class="kr">글로벌</span><span class="en">Global</span>
       </div>
-      <div class="ttl kr">뉴스를 불러오지 못했습니다</div><div class="ttl en" style="display:none">Failed to load news</div>
-      <div class="bdy kr">잠시 후 다시 시도해주세요.</div><div class="bdy en" style="display:none">Please try again later.</div>
-      
-    </div><div class="disclaimer kr">⚠️ "이탈리아 시각"은 Claude AI가 추론한 내용으로, 실제 이탈리아 언론 보도와 다를 수 있습니다.</div><div class="disclaimer en" style="display:none">⚠️ "Italy's perspective" is inferred by Claude AI and may differ from actual Italian media coverage.</div></div>
-<div class="ft">자동 생성 — 2026년 03월 27일 (Fri) · Claude API</div>
-</div><script>function sw(id,el){document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById(id).classList.add('on');el.classList.add('on');}
-function setLang(lang){document.querySelectorAll('.kr').forEach(el=>el.style.display=lang==='kr'?'':'none');document.querySelectorAll('.en').forEach(el=>el.style.display=lang==='en'?'':'none');document.querySelectorAll('.lang-btn').forEach(btn=>btn.classList.remove('active'));document.getElementById('btn-'+lang).classList.add('active');localStorage.setItem('briefing-lang',lang);}
-window.onload=function(){setLang(localStorage.getItem('briefing-lang')||'kr');}</script></body></html>
+      <div class="card-date">2026-03-27</div>
+      <div class="card-title kr">뉴스를 불러오지 못했습니다</div>
+      <div class="card-title en">Failed to load news</div>
+      <div class="card-body kr">잠시 후 다시 시도해주세요.</div>
+      <div class="card-body en">Please try again later.</div>
+      <div class="card-src"></div>
+    </div></div>
+</div>
+
+<script>
+function setLang(l){
+  document.body.classList.toggle('en-mode', l==='en');
+  document.getElementById('btn-kr').classList.toggle('active', l==='kr');
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+}
+function showTab(id, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
